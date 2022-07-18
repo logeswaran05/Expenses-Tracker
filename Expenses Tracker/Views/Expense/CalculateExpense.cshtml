@@ -1,0 +1,120 @@
+﻿@model IEnumerable<Expenses_Tracker.Models.Expense>
+
+@{
+    ViewBag.Title = "CalculateExpense";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    decimal total = 0;
+    bool isVisible = ViewBag.isTableVisible;
+}
+
+<h3>Calculate Expense</h3>
+
+<hr />
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row ">
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="col-lg-5">
+            @Html.Label("Duration", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="month" name="Duration" class="form-control" />
+            </div>
+        </div>
+        <div class="col-lg-5">
+            @Html.Label("Category", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select name="ExpenseCategory" class="form-control">
+                    <option value="0">Electricity</option>
+                    <option value="1">Phone</option>
+                    <option value="2">Food</option>
+                    <option value="3">Fuel</option>
+                    <option value="4">Cloths</option>
+                    <option value="5">Television</option>
+                    <option value="6">Internet</option>
+                    <option value="7">Other</option>
+                </select>
+            </div>
+        </div>
+        <br/>
+        <div class="my-3">
+
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Search" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+}
+<hr />
+@if (isVisible)
+{
+
+    <div class="row">
+        <div class="col-lg-9">
+
+            <h3>Expenses </h3>
+            <table class="table">
+                <tr>
+
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Date)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Amount)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ExpenseCategory)
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    total = total + item.Amount;
+
+                    <tr>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Amount)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ExpenseCategory)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "EditExpense", new
+                            {
+                                id = item.Id
+                }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                        </td>
+                    </tr>
+
+                }
+
+            </table>
+        </div>
+        <div class="col-lg-3">
+
+            <h4>Total Expanses <br /><span>@total</span> Rs</h4>
+        </div>
+    </div>}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

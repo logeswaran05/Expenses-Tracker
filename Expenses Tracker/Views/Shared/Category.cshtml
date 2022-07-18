@@ -1,0 +1,6 @@
+﻿@using Expenses_Tracker.Models
+@model Expense
+
+@Html.DropDownListFor(m => m.ExpenseCategory,
+            new SelectList(Enum.GetValues(typeof(Category))),
+            "Select Category")
